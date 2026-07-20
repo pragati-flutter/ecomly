@@ -38,7 +38,7 @@ const orderSchema = Schema({
       "expired",
     ],
     required: true,
-    default: [pending],
+   default: ["pending"]
   },
 
   totalPrice: Number,

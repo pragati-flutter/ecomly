@@ -21,7 +21,7 @@ exports.getUsers = async (_, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select(
-      "-passwordHash -resetPasswordOtp -resetPasswordOtpExpires",
+      "-passwordHash -resetPasswordOtp -resetPasswordOtpExpires -cart",
     );
 
     if (!user) {
@@ -50,6 +50,7 @@ exports.updateUser = async (req, res) => {
 
     }
     user.passwordHash = undefined;
+    user.cart=undefined;
     return res.json( user );
   } catch (error) {
     return res.status(500).json({ type: error.name, message: error.message });
