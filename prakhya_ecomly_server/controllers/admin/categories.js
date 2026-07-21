@@ -1,8 +1,9 @@
 const { Types } = require("mongoose");
 const media_helper = require("../../helpers/media_helper");
 const util = require('util');
-const category = require("../../models/category");
+const Category = require("../../models/category");
 const { type } = require("os");
+const { error } = require("console");
 
 exports.addCategory = async function(req,res){
     
@@ -45,8 +46,29 @@ try{
 
 }
 
-exports.deleteCategory = await function(req,res){
-    try{}catch(error){
+exports.editCategory = async function(req,res){
+    try{
+
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({type:error.type,message:error.message});
+
+    }
+}
+
+exports.deleteCategory = async function(req,res){
+    try{
+        const category = await Category.findById(req.params.id);
+        if(!category){
+            return res.status(404).json({
+                message:'category not found'
+            });
+        }
+
+        category.markedForDeletion = true;
+        category.save();
+        return category.status(204).end();
+    }catch(error){
         res.status(500).json({
             type: error.name,
             message:error.message
