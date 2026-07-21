@@ -25,4 +25,4 @@ cartProductSchema.set("toJson", {
   virtuals: true,
 });
 
-exports.cartProduct = model('cartProduct',this.cartProductSchema);
+exports.cartProduct = model('cartProduct',cartProductSchema);

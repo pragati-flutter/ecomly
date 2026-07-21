@@ -54,4 +54,4 @@ orderSchema.set("toJson", {
 });
 
 
-exports.Order = model("Order", model);
+exports.Order = model("Order", orderSchema);
