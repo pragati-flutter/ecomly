@@ -1,30 +1,32 @@
 const express = require("express");
 
-const router = express.Router;
+const router = express.Router();
 const userController = require("../controllers/admin/users");
 const categoriesController = require("../controllers/admin/categories");
+const ordersController = require("../controllers/admin/orders");
+const productController = require("../controllers/admin/products");
 
 //USERS
 
-router.get("/users/count", adminController.getUserController);
-router.delete("/users/:id", adminController.deleteUser);
+router.get("/users/count", userController.getUserCount);
+router.delete("/users/:id", userController.deleteUser);
 
 //CATEGORIES
-router.post("/categories", adminController.addCategory);
-router.put("/categories/:id", adminController.editCategory);
-router.delete("category/:id", adminController.deleteCategory);
+router.post("/categories", categoriesController.addCategory);
+router.put("/categories/:id", categoriesController.editCategory);
+router.delete("category/:id", categoriesController.deleteCategory);
 
 //PRODUCTS
-router.get("/products/count", adminController.getProductsCount);
-router.post("/products", adminController.addProducts);
-router.put("/product/:id", adminController.editProduct);
-router.delete("/product/:id/images", adminController.deleteProductImages);
-router.delete("/products/:id",adminController.deleteProduct)
+// router.get("/products/count", productController.getProductsCount);
+// router.post("/products", productController.addProducts);
+// router.put("/product/:id", productController.editProduct);
+// router.delete("/product/:id/images", productController.deleteProductImages);
+// router.delete("/products/:id",productController.deleteProduct)
 
 //ORDERS
 
-router.get("/orders", adminController.getOrders);
-router.get("/orders/:count", adminController.getOrderCount);
-router.put("/orders/:id", adminController.changeOrderStatus);
+router.get("/orders", ordersController.getOrders);
+router.get("/orders/:count", ordersController.getOrderCount);
+router.put("/orders/:id", ordersController.changeOrderStatus);
 
 module.exports = router;
