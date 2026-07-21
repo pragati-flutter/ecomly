@@ -30,6 +30,7 @@ app.use(authJwt());
 app.use(`${API}/`, authRouter);
 app.use(`${API}/users`,userRouter);
 app.use(`${API}/admin`,adminRouter);
+app.use('/public',express.static(__dirname + '/public'));
 app.use(errorHandler); 
 
 
