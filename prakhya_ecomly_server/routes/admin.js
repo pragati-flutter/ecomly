@@ -28,5 +28,6 @@ router.delete("category/:id", categoriesController.deleteCategory);
 router.get("/orders", ordersController.getOrders);
 router.get("/orders/:count", ordersController.getOrderCount);
 router.put("/orders/:id", ordersController.changeOrderStatus);
+router.delete("/orders/:id",ordersController.deleteOrder);
 
 module.exports = router;
