@@ -176,3 +176,30 @@ exports.editProduct = async function (req, res) {
     return res.json({ type: error.type, message: error.message });
   }
 };
+
+exports.deleteProductImages = async function(req,res){
+try{
+const productId = req.params.Id;
+const {deleteImagesUrls} = req.body;
+
+if(!mongoose.isValidObjectId(productId) || !Array.isArray(deleteImagesUrls)){
+  return res.status(400).json({message:'Invalid request data'});
+}
+await media_helper.deleteImages(deleteImagesUrls);
+const product = await Product.findById(productId);
+if(!product)return res.status(404).json({message:'Product not found'});
+
+product.images = product.images.filter((image)=> !deleteImagesUrls.includes(image));
+await product.save();
+
+}catch(error){
+  console.error(`Error deleting product:${error.message}`);
+ 
+
+  if(error.code == 'ENOENT'){
+    return res.status(404).json({message:'Image not found'});
+  }
+   return res.status(500).json({type:error.type,message: error.message});
+}
+
+}
