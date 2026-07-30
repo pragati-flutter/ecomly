@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const { Product } = require("../../models/product");
 const { Category } = require("../..models/category");
+const { Review } = require("../../models/review");
 
 exports.getProductCount = async function (req, res) {
   try {
@@ -163,11 +164,10 @@ exports.editProduct = async function (req, res) {
       req.body,
       { new: true },
     );
-    if(!updateProduct){
-        return res.status(404).json({message: 'Product not found'});
-
+    if (!updateProduct) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    return res.json({updateProduct});
+    return res.json({ updateProduct });
   } catch (error) {
     console.error(error);
     if (error instanceof multer.MulterError) {
@@ -177,29 +177,54 @@ exports.editProduct = async function (req, res) {
   }
 };
 
-exports.deleteProductImages = async function(req,res){
-try{
-const productId = req.params.Id;
-const {deleteImagesUrls} = req.body;
+exports.deleteProductImages = async function (req, res) {
+  try {
+    const productId = req.params.Id;
+    const { deleteImagesUrls } = req.body;
 
-if(!mongoose.isValidObjectId(productId) || !Array.isArray(deleteImagesUrls)){
-  return res.status(400).json({message:'Invalid request data'});
-}
-await media_helper.deleteImages(deleteImagesUrls);
-const product = await Product.findById(productId);
-if(!product)return res.status(404).json({message:'Product not found'});
+    if (
+      !mongoose.isValidObjectId(productId) ||
+      !Array.isArray(deleteImagesUrls)
+    ) {
+      return res.status(400).json({ message: "Invalid request data" });
+    }
+    await media_helper.deleteImages(deleteImagesUrls);
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
-product.images = product.images.filter((image)=> !deleteImagesUrls.includes(image));
-await product.save();
+    product.images = product.images.filter(
+      (image) => !deleteImagesUrls.includes(image),
+    );
+    await product.save();
+  } catch (error) {
+    console.error(`Error deleting product:${error.message}`);
 
-}catch(error){
-  console.error(`Error deleting product:${error.message}`);
- 
-
-  if(error.code == 'ENOENT'){
-    return res.status(404).json({message:'Image not found'});
+    if (error.code == "ENOENT") {
+      return res.status(404).json({ message: "Image not found" });
+    }
+    return res.status(500).json({ type: error.type, message: error.message });
   }
-   return res.status(500).json({type:error.type,message: error.message});
-}
+};
 
-}
+exports.deleteProduct = async function (req, res) {
+  try {
+    const productId = req.params.id;
+    if (!mongoose.isValidObjectId(productId)) {
+      return res.status(404).json({ message: "Invalid Product" });
+    }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    await media_helper.deleteImages(
+      [...product.images, product.image],
+     "ENOENT",
+    );
+    await Review.deleteMany({_id:{$in: product.reviews}});
+    await Product.findByIdAndDelete(productId);
+    return res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.type, message: error.message });
+  }
+};
