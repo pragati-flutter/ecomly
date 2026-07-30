@@ -1,9 +1,9 @@
 const { default: mongoose } = require("mongoose");
 const { Product } = require("../../models/product");
-const { Category } = require("../..models/category");
+const { Category } = require("../../models/category");
 const { Review } = require("../../models/review");
 
-exports.getProductCount = async function (req, res) {
+exports.getProductsCount = async function (req, res) {
   try {
     const count = await Product.countDocuments();
     if (!count) {
@@ -18,7 +18,7 @@ exports.getProductCount = async function (req, res) {
   }
 };
 
-exports.addProduct = async function (req, res) {
+exports.addProducts = async function (req, res) {
   try {
     const uploadImage = util.promisify(
       media_helper.upload.fields(
@@ -228,3 +228,22 @@ exports.deleteProduct = async function (req, res) {
     return res.status(500).json({ type: error.type, message: error.message });
   }
 };
+
+exports.getProducts = async function(req,res){
+  try{
+const page = req.query.page || 1;
+const pageSize = 10;
+const products = await Product.find().select('-reviews -rating').skip((page-1)*pageSize).limit(pageSize);
+
+if(!products){
+  return res.status(404).json({message:'Products not found'});
+}
+return res.json({products});
+
+  }catch(error){
+    console.error(error);
+    return res.json({
+      type: error.type,message:error.message
+    });
+  }
+}

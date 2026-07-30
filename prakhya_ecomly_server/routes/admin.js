@@ -17,11 +17,12 @@ router.put("/categories/:id", categoriesController.editCategory);
 router.delete("category/:id", categoriesController.deleteCategory);
 
 //PRODUCTS
-// router.get("/products/count", productController.getProductsCount);
-// router.post("/products", productController.addProducts);
-// router.put("/product/:id", productController.editProduct);
-// router.delete("/product/:id/images", productController.deleteProductImages);
-// router.delete("/products/:id",productController.deleteProduct)
+router.get("/products/count", productController.getProductsCount);
+router.get('/products',productController.getProducts);
+router.post("/products", productController.addProducts);
+router.put("/product/:id", productController.editProduct);
+router.delete("/product/:id/images", productController.deleteProductImages);
+router.delete("/products/:id",productController.deleteProduct)
 
 //ORDERS
 
