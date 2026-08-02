@@ -10,11 +10,11 @@ const mongoose = require("mongoose");
 require("dotenv/config");
 
 const authJwt = require('./middleware/jwt');
-const errorHandler = require("./middleware/error_handler");
-const authRouter = require("./routes/auth");
-const userRouter = require("./routes/user");
-const adminRouter = require("./routes/admin");
-
+const errorHandler = require('./middleware/error_handler');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
+const categoriesRouter = require('./routes/categories');
 
 const env = process.env;
 const API = env.API_URL;
@@ -30,7 +30,9 @@ app.use(authJwt());
 app.use(`${API}/`, authRouter);
 app.use(`${API}/users`,userRouter);
 app.use(`${API}/admin`,adminRouter);
+app.use(`${API}/categories`,categoriesRouter);
 app.use('/public',express.static(__dirname + '/public'));
+
 app.use(errorHandler); 
 
 
