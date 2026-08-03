@@ -4,7 +4,7 @@ const { Product } = require("../models/product");
 const getProducts = async function (req, res) {
   try {
     let products;
-    const page = req.querry.page || 1;
+    const page = req.query.page || 1;
     const pageSize = 10;
 
     if (req.query.criteria) {
@@ -51,3 +51,44 @@ const getProducts = async function (req, res) {
     return res.json({ type: error.type, message: error.message });
   }
 };
+
+
+const searchProducts = async function(req,res){
+    try{
+     const searchTerm = req.query.q;
+
+     const page = req.query.page||1;
+     const pageSize = 10;
+     let query = {};
+     if(req.query.category){
+
+        query = {category:req.query.category};
+        if(req.query.genderAgeCategory){
+            query = {query['genderAgeCategory']: req.query.genderAgeCategory};
+        }
+
+     }else if(req.query.genderAgeCategory){
+        query = {genderAgeCategory:req.query.genderAgeCategory.toLowerCase()};
+     }
+     if(searchTerm){
+        query = {
+            ...query,
+        $text:{
+            $search:searchTerm,
+            $language:'english',
+            $caseSensitive:false,
+        }
+        }
+     }
+     const searchResults = await Product.find(query).skip((page-1)*pageSize).limit(pageSize);
+    return res.json(searchResults);
+
+     }
+
+
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({type:error.type, message:error.message});
+    }
+
+
