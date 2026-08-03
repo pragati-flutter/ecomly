@@ -83,12 +83,28 @@ const searchProducts = async function(req,res){
      const searchResults = await Product.find(query).skip((page-1)*pageSize).limit(pageSize);
     return res.json(searchResults);
 
-     }
+     }catch(error){
+        console.error(error);
+        return res.status(500).json({type:error.type, message:error.message});
+    }
+}
+
+const getProductById = async function(req,res){
+    try{
+    const product = await Product.findById(req.params.id).select('-reviews');
+    if(!product){
+        return res.json({message: 'Product does not found'});
+    }
+    return res.json(product);
 
 
     }catch(error){
         console.error(error);
         return res.status(500).json({type:error.type, message:error.message});
     }
+}
+
+    
+
 
 
