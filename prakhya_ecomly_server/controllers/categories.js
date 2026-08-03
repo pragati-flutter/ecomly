@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.router;
+
 const {Category} = require('../models/category');
 
 const getCategories = async function(req,res){
