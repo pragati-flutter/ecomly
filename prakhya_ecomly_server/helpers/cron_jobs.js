@@ -1,4 +1,4 @@
-const cron = require("node-corn");
+const cron = require("node-cron");
 
 const Category = require("../../models/category");
 const Product = require("../../models/product");
