@@ -1,7 +1,7 @@
 
 const {Category} = require('../models/category');
 
-const getCategories = async function(req,res){
+exports.getCategories = async function(req,res){
     try{
      const categories = await Category.find();
 
@@ -22,7 +22,7 @@ const getCategories = async function(req,res){
 
 }
 
-const getCategoryById = async function(req,res){
+ exports.getCategoryById = async function(req,res){
     try{
       const category = await Category.findById(req.params.id);
       if(!category){
