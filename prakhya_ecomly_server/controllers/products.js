@@ -1,7 +1,7 @@
 const { query } = require("express-validator");
 const { Product } = require("../models/product");
 
-const getProducts = async function (req, res) {
+exports.getProducts = async function (req, res) {
   try {
     let products;
     const page = req.query.page || 1;
@@ -53,7 +53,7 @@ const getProducts = async function (req, res) {
 };
 
 
-const searchProducts = async function(req,res){
+exports.searchProducts = async function(req,res){
     try{
      const searchTerm = req.query.q;
 
@@ -64,7 +64,7 @@ const searchProducts = async function(req,res){
 
         query = {category:req.query.category};
         if(req.query.genderAgeCategory){
-            query = {query['genderAgeCategory']: req.query.genderAgeCategory};
+             query['genderAgeCategory']= req.query.genderAgeCategory.toLowerCase();
         }
 
      }else if(req.query.genderAgeCategory){
@@ -89,7 +89,7 @@ const searchProducts = async function(req,res){
     }
 }
 
-const getProductById = async function(req,res){
+ exports.getProductById = async function(req,res){
     try{
     const product = await Product.findById(req.params.id).select('-reviews');
     if(!product){
@@ -103,6 +103,7 @@ const getProductById = async function(req,res){
         return res.status(500).json({type:error.type, message:error.message});
     }
 }
+
 
     
 

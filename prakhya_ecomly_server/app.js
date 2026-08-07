@@ -23,7 +23,6 @@ const API = env.API_URL;
 
 // Middleware
 app.use(cors());
-app.options('*',cors());
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
 app.use(authJwt());

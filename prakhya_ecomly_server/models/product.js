@@ -8,7 +8,7 @@ const productSchema = Schema({
   color: { type: String },
   image: { type: String, required: true },
   images: { type: String },
-  reviews: [{ type: Schema.Types.ObjectId, ref: "Reviews" }],
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
   numberOfReviews: { type: Number, default: 0 },
   sizes: [{ type: String }],
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
@@ -30,7 +30,7 @@ productSchema.pre("save", async function (next) {
 
     this.numberOfReviews = this.reviews.length;
   }
-  next();
+  
 });
 productSchema.index({ name: "text", description: "text" });
 productSchema.virtual('productInitials').get(function(){

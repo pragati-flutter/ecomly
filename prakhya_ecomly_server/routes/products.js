@@ -1,16 +1,13 @@
-const express = require('express');
-
+const express = require("express");
 
 const router = express.Router();
-const productController = require('../controllers/products');
-const reviewsController = require('../controllers/reviews');
+const productController = require("../controllers/products");
+const reviewsController = require("../controllers/reviews");
 
-
-
-router.get('/',productController.getProducts);
-router.get('/search',productController.searchProducts);
-router.post('/:id',productController.getProductById);
-router.get('/:id/reviews',reviewController.leaveReview);
-router.get('/:id/reviews',reviewController.getProductReviews);
+router.get("/", productController.getProducts);
+router.get("/search", productController.searchProducts);
+router.get("/:id", productController.getProductById);
+router.post("/:id/reviews", reviewsController.leaveReview);
+router.get("/:id/reviews", reviewsController.getProductReview);
 
 module.exports = router;
